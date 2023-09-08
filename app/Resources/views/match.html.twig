@@ -1,0 +1,92 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h2>CARGAR PARTIDO</h2>
+
+    {% if app.session.flashBag is defined and app.session.flashBag.has("success") %}
+        {% for message in app.session.flashBag.get("success") %}
+            <div class="alert alert-success">
+                <b>{{ message }}</b>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if app.session.flashBag is defined and app.session.flashBag.has("error") %}
+        {% for message in app.session.flashBag.get("error") %}
+            <div class="alert alert-danger">
+                <b>{{ message }}</b>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if form is defined %}
+        {{
+            form_start(
+                form,
+                {
+                    action: "",
+                    method: "POST"
+                }
+            )
+        }}
+            {{ form_widget(form) }}
+
+            <button type="submit">Crear</button>
+        {{ form_end(form) }}
+    {% endif %}
+
+    {# <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Local</th>
+                <th>Gol local</th>
+                <th>Gol Visitante</th>
+                <th>Visitante</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% if matchs is defined %}
+                {% for match in matchs %}
+                    <tr>
+                        <td>{{ match.id is defined ? match.id }}</td>
+
+                        <td>{{ match.datematch is defined ? match.datematch|date('Y-m-d H:i:s') }}</td>
+
+                        <td>{{ match.home.name is defined ? match.home.name }}</td>
+
+                        <td>{{ match.goalsHome is null ? "-" : match.goalsHome }}</td>
+
+                        <td>{{ match.goalsVisitor is null ? "-" : match.goalsVisitor }}</td>
+
+                        <td>{{ match.visitor.name is defined ? match.visitor.name }}</td>
+
+                        <td>
+                            <a
+                                href="{{ path("match_edit", {id: match.id is defined ? match.id}) }}"
+                                class="btn btn-primary"
+                            >
+                                Editar
+                            </a>
+
+                            <a
+                                href="{{ path("match_delete", {id: match.id is defined ? match.id}) }}"
+                                class="btn btn-danger"
+                                onclick="return confirm('¿Estás seguro de que deseas eliminar este equipo?')"
+                            >
+                                Borrar
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+
+    <br>
+    <br>
+
+    <a href="{{ path("match_fixture")}}">Ver tabla posiciones</a> #}
+{% endblock %}

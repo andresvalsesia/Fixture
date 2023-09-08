@@ -1,0 +1,28 @@
+team_create:
+  path: /team
+  defaults: { _controller: AppBundle:Team:create}
+
+team_edit:
+  path: /team/{id}
+  defaults: { _controller: AppBundle:Team:edit}
+
+team_delete:
+  path: /team/delete/{id}
+  defaults: { _controller: AppBundle:Team:delete}
+
+
+match_create:
+  path: /match
+  defaults: { _controller: AppBundle:MatchSoccer:create}
+
+match_edit:
+  path: /match/{id}
+  defaults: { _controller: AppBundle:MatchSoccer:edit}
+
+match_delete:
+  path: /match/delete/{id}
+  defaults: { _controller: AppBundle:MatchSoccer:delete}
+
+match_fixture:
+  path: /fixture
+  defaults: { _controller: AppBundle:MatchSoccer:fixture}

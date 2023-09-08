@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block body%}
+    <table>
+        <thead>
+            <tr>
+                <th>Posicion</th>
+                <th>Equipo</th>
+                <th>Puntos</th>
+                <th>PJ</th>
+                <th>PG</th>
+                <th>PE</th>
+                <th>PP</th>
+                <th>GF</th>
+                <th>GC</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% set i = 0 %}
+            {% if fixture is defined %}
+                {% for team in fixture %}
+                    {% set i = i + 1 %}
+
+                    <tr>
+                        <td>{{ i }}</td>
+                        <td>{{ team.team is defined ? team.team }}</td>
+                        <td>{{ team.point is defined ? team.point }}</td>
+                        <td>{{ team.pj is defined ? team.pj }}</td>
+                        <td>{{ team.win is defined ? team.win }}</td>
+                        <td>{{ team.tie is defined ? team.tie }}</td>
+                        <td>{{ team.lost is defined ? team.lost }}</td>
+                        <td>{{ team.gf is defined ? team.gf }}</td>
+                        <td>{{ team.gc is defined ? team.gc }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

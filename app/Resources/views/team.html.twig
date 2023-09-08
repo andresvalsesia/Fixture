@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <h1>FIXTURE</h1>
+
+    {% if app.session.flashBag.has('success') is defined and app.session.flashBag.has('success') %}
+        {% for message in app.session.flashBag.get('success') %}
+            <div class="alert alert-success">
+                <b>{{ message }}</b>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if app.session.flashBag.has('error') is defined and app.session.flashBag.has('error') %}
+        {% for message in app.session.flashBag.get('error') %}
+            <div class="alert alert-danger">
+                <b>{{ message }}</b>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if form is defined %}
+        {{
+            form_start(
+                form,
+                {
+                    action:"",
+                    method:'POST'
+                }
+            )
+        }}
+            {{ form_widget(form) }}
+                <button type="submit">Crear</button>
+            {{ form_end(form) }}
+    {% endif %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre del Equipo</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% if teams is defined %}
+                {% for team in teams %}
+                    <tr>
+                        <td>{{ team.id is defined ? team.id }}</td>
+                        <td>{{ team.name is defined ? team.name }}</td>
+                        <td>
+                            <a class="btn btn-primary" href="{{ path("team_edit", {"id": team.id is defined ? team.id}) }}">Editar</a>
+                            <a class="btn btn-danger"  href="{{ path("team_delete", {"id": team.id is defined ? team.id}) }}"
+                            onclick="return confirm('¿Estás seguro de que deseas eliminar este equipo?')"
+                            >Borrar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+
+    <br>
+
+    <br>
+
+    <a href="{{ path("match_create")}}">Crear partidos</a>
+{% endblock %}
