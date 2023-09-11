@@ -20,45 +20,59 @@ class TeamController extends Controller
 		return $this->getEm()->getRepository($name);
 	}
 
-	public function createAction(Request $request)
+	protected function processType(Request $request, $data, string $successMessage, $edit)
 	{
-	 	$teams = $this->getEr("AppBundle:Team")->findAll();
+		$teams = $this->getEr("AppBundle:Team")->findAll();
 
-	 	$team = new \AppBundle\Entity\Team();
+		$form = $this->createForm(TeamType::class,$data)
+			->handleRequest($request);
 
-		$form = $this->createForm(TeamType::class,$team);
+		if ($form->isSubmitted() && $form->isValid()) {
+			$data = $form->getData();
 
-		$form->handleRequest($request);
-
-		if( $form->isSubmitted() && $form->isValid() ){
-
-			$name = trim( $form->get("name")->getData() );
-			$exist = $this->getEr("AppBundle:Team")->nameExist($name);
+			$exist = $this->getEr("AppBundle:Team")->nameExist($data);
 
 			if ($exist) {
-
-				$this->addFlash("error", "{$name} ya esta cargado en el sistema");
+				$this->addFlash(
+					"error",
+					"{$data->getName()} ya esta cargado en el sistema"
+				);
 
 				return $this->redirect($this->generateUrl("team_create"));
-
 			}
 
-			$team = $form->getData();
-			$this->getEm()->persist($team);
-			$this->getEm()->flush($team);
+			$this->getEm()->persist($data);
+			$this->getEm()->flush($data);
 
-			$this->addFlash("success", "{$name} se ha creado correctamente.");
+			$this->addFlash(
+				"success",
+				sprintf(
+					$successMessage,
+					$data->getName()
+				)
+			);
 
 			return $this->redirect($this->generateUrl("team_create"));
-
 		}
 
-		return $this->render("team.html.twig", [
+		return $this->render(
+			"team.html.twig",
+			[
+				'form'  => $form->createView(),
+    			'teams' => $teams,
+    			'edit' 	=> $edit
+			]
+		);
+	}
 
-    				"form" => $form->createView(),
-    				"teams" => $teams
-
-		]);
+	public function createAction(Request $request)
+	{
+		return $this->processType(
+	 		$request,
+	 		new \AppBundle\Entity\Team(),
+	 		"Se registro el equipo %s",
+			false
+	 	);
 	}
 
 	public function editAction(Request $request, $id)
@@ -68,28 +82,11 @@ class TeamController extends Controller
 			die();
 		}
 
-		$form = $this->createForm(TeamType::class, $team)
-			->handleRequest($request);
-
-		if ($form->isSubmitted() && $form->isValid()) {
-			$team = $form->getData();
-
-			$this->getEm()->persist($team);
-			$this->getEm()->flush($team);
-
-			$this->addFlash(
-				"success",
-				"Se ha editado correctamente el equipo {$team->getName()} con ID : {$id}"
-			);
-
-			return $this->redirect($this->generateUrl("team_create"));
-		}
-
-		return $this->render(
-			"edit_team.html.twig",
-			[
-				"form" => $form->createView(),
-			]
+		return $this->processType(
+			$request,
+			$team,
+			"Se edito el equipo %s",
+			true
 		);
 	}
 

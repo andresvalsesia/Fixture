@@ -11,20 +11,26 @@ namespace AppBundle\Repository;
 class TeamRepository extends \Doctrine\ORM\EntityRepository
 {
 
-	public function nameExist($name)
+	public function nameExist($team)
 	{
+		try {
+			$query = $this->createQueryBuilder("t")
+				->select("COUNT(t.id)")
+				->where("t.name LIKE :name")
+				->setParameter("name","%{$team->getName()}%");
 
-		$query = $this->createQueryBuilder('t')
-					  ->select('t')
-					  ->where('t.name LIKE :name')
-					  ->setParameter('name',"%{$name}%")
-					  ->setMaxResults(1)
-					  ->getQuery()
-					  ->getOneOrNullResult();
-
-
-		return $query;
-
+			if (is_null($team->getId())) {
+				return (bool) $query->getQuery()
+					->getSingleScalarResult();
+			} else {
+				return (bool) $query->andWhere("t.id != :id")
+					->setParameter("id", (int) $team->getId())
+					->getQuery()
+					->getSingleScalarResult();
+			}
+		}
+		catch (\Exception $e) {
+			return true;
+		}
 	}
-
 }

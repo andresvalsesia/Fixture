@@ -29,7 +29,6 @@ class MatchSoccerRepository extends \Doctrine\ORM\EntityRepository
 	{
 
 		try {
-
 			$query = $this->createQueryBuilder("m")
 				->select("COUNT(m.id)")
 				->andWhere("m.home = :home")
@@ -40,17 +39,17 @@ class MatchSoccerRepository extends \Doctrine\ORM\EntityRepository
 				->setParameter("date", $match->getDateMatch());
 
 			if (is_null($match->getId())) {
-				 return (bool) $query->getQuery()
+				return (bool) $query->getQuery()
 					->getSingleScalarResult();
 			} else {
-				$query->andWhere("m.id != :id")
+				return (bool) $query->andWhere("m.id != :id")
 					->setParameter("id", (int) $match->getId())
 					->getQuery()
 					->getSingleScalarResult();
 			}
 		}
 		catch (\Exception $e) {
-			dump($e); die;
+			return true;
 		}
 	}
 

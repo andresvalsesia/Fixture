@@ -20,7 +20,7 @@ class MatchSoccerController extends Controller
 		return $this->getEm()->getRepository($name);
 	}
 
-	protected function processType(Request $request, $data, string $successMessage, string $view)
+	protected function processType(Request $request, $data, string $successMessage, $edit)
 	{
 		$form = $this->createForm(MatchSoccerType::class, $data)
 			->handleRequest($request);
@@ -54,9 +54,10 @@ class MatchSoccerController extends Controller
 		}
 
 		return $this->render(
-			$view,
+			"match.html.twig",
 			[
-				'form'	=> $form->createView()
+				'form'	=> $form->createView(),
+				'edit' 	=> $edit
 			]
 		);
 	}
@@ -66,8 +67,8 @@ class MatchSoccerController extends Controller
 		return $this->processType(
 			$request,
 			new \AppBundle\Entity\MatchSoccer(),
-			"Se registro el partido %s vs %d",
-			"match.html.twig"
+			"Se registro el partido %s vs %s",
+			false
 		);
 	}
 
@@ -81,8 +82,8 @@ class MatchSoccerController extends Controller
 		return $this->processType(
 			$request,
 			$match,
-			"Se edito el partido %s vs %d",
-			"edit_match.html.twig"
+			"Se edito el partido %s vs %s",
+			true
 		);
 	}
 

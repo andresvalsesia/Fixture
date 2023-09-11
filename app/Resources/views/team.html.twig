@@ -2,6 +2,8 @@
 {% block body %}
     <h1>FIXTURE</h1>
 
+    <h2>{{ edit ? "EDITAR EQUIPO" : "CREAR EQUIPO" }}</h2>
+
     {% if app.session.flashBag.has('success') is defined and app.session.flashBag.has('success') %}
         {% for message in app.session.flashBag.get('success') %}
             <div class="alert alert-success">
@@ -29,7 +31,7 @@
             )
         }}
             {{ form_widget(form) }}
-                <button type="submit">Crear</button>
+                <button type="submit">{{ edit ? "Editar" : "Crear" }}</button>
             {{ form_end(form) }}
     {% endif %}
 
@@ -37,6 +39,7 @@
         <thead>
             <tr>
                 <th>ID</th>
+
                 <th>Nombre del Equipo</th>
             </tr>
         </thead>
@@ -46,10 +49,12 @@
                 {% for team in teams %}
                     <tr>
                         <td>{{ team.id is defined ? team.id }}</td>
+
                         <td>{{ team.name is defined ? team.name }}</td>
+
                         <td>
-                            <a class="btn btn-primary" href="{{ path("team_edit", {"id": team.id is defined ? team.id}) }}">Editar</a>
-                            <a class="btn btn-danger"  href="{{ path("team_delete", {"id": team.id is defined ? team.id}) }}"
+                            <a class="btn btn-primary" href="{{ path("team_edit", {id: team.id is defined ? team.id}) }}">Editar</a>
+                            <a class="btn btn-danger"  href="{{ path("team_delete", {id: team.id is defined ? team.id}) }}"
                             onclick="return confirm('¿Estás seguro de que deseas eliminar este equipo?')"
                             >Borrar</a>
                         </td>
@@ -63,5 +68,5 @@
 
     <br>
 
-    <a href="{{ path("match_create")}}">Crear partidos</a>
+    <a href="{{ path("match_create") }}">Crear partidos</a>
 {% endblock %}

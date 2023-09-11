@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <h2>CARGAR PARTIDO</h2>
+    <h2>{{ edit ? "EDITAR PARTIDO" : "CARGAR PARTIDO" }}</h2>
 
     {% if app.session.flashBag is defined and app.session.flashBag.has("success") %}
         {% for message in app.session.flashBag.get("success") %}
@@ -31,9 +31,9 @@
         }}
             {{ form_widget(form) }}
 
-            <button type="submit">Crear</button>
+            <button type="submit">{{ edit ? "Editar" : "Crear" }}</button>
         {{ form_end(form) }}
     {% endif %}
 
-    <a href="{{ path("match_fixture")}}">Ver tabla posiciones</a>
+    <a href="{{ path("match_fixture") }}">Ver tabla posiciones</a>
 {% endblock %}

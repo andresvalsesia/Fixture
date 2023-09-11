@@ -21,10 +21,15 @@
         <thead>
             <tr>
                 <th>ID</th>
+
                 <th>Fecha</th>
+
                 <th>Local</th>
+
                 <th>Gol local</th>
+
                 <th>Gol Visitante</th>
+
                 <th>Visitante</th>
             </tr>
         </thead>
@@ -94,17 +99,31 @@
 
                     <tr>
                         <td>{{ i }}</td>
-                        <td>{{ team.team is defined ? team.team }}</td>
+
+                        <td>{{ team.team  is defined ? team.team }}</td>
+
                         <td>{{ team.point is defined ? team.point }}</td>
-                        <td>{{ team.pj is defined ? team.pj }}</td>
-                        <td>{{ team.win is defined ? team.win }}</td>
-                        <td>{{ team.tie is defined ? team.tie }}</td>
-                        <td>{{ team.lost is defined ? team.lost }}</td>
-                        <td>{{ team.gf is defined ? team.gf }}</td>
-                        <td>{{ team.gc is defined ? team.gc }}</td>
+
+                        <td>{{ team.pj    is defined ? team.pj }}</td>
+
+                        <td>{{ team.win   is defined ? team.win }}</td>
+
+                        <td>{{ team.tie   is defined ? team.tie }}</td>
+
+                        <td>{{ team.lost  is defined ? team.lost }}</td>
+
+                        <td>{{ team.gf    is defined ? team.gf }}</td>
+
+                        <td>{{ team.gc    is defined ? team.gc }}</td>
                     </tr>
                 {% endfor %}
             {% endif %}
         </tbody>
     </table>
+
+    <br>
+
+    <br>
+
+    <a href="{{ path("team_create") }}">Inicio</a>
 {% endblock %}
