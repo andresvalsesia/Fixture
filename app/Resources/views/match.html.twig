@@ -35,58 +35,5 @@
         {{ form_end(form) }}
     {% endif %}
 
-    {# <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Fecha</th>
-                <th>Local</th>
-                <th>Gol local</th>
-                <th>Gol Visitante</th>
-                <th>Visitante</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            {% if matchs is defined %}
-                {% for match in matchs %}
-                    <tr>
-                        <td>{{ match.id is defined ? match.id }}</td>
-
-                        <td>{{ match.datematch is defined ? match.datematch|date('Y-m-d H:i:s') }}</td>
-
-                        <td>{{ match.home.name is defined ? match.home.name }}</td>
-
-                        <td>{{ match.goalsHome is null ? "-" : match.goalsHome }}</td>
-
-                        <td>{{ match.goalsVisitor is null ? "-" : match.goalsVisitor }}</td>
-
-                        <td>{{ match.visitor.name is defined ? match.visitor.name }}</td>
-
-                        <td>
-                            <a
-                                href="{{ path("match_edit", {id: match.id is defined ? match.id}) }}"
-                                class="btn btn-primary"
-                            >
-                                Editar
-                            </a>
-
-                            <a
-                                href="{{ path("match_delete", {id: match.id is defined ? match.id}) }}"
-                                class="btn btn-danger"
-                                onclick="return confirm('¿Estás seguro de que deseas eliminar este equipo?')"
-                            >
-                                Borrar
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-        </tbody>
-    </table>
-
-    <br>
-    <br>
-
-    <a href="{{ path("match_fixture")}}">Ver tabla posiciones</a> #}
+    <a href="{{ path("match_fixture")}}">Ver tabla posiciones</a>
 {% endblock %}

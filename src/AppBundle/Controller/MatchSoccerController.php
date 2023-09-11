@@ -20,17 +20,7 @@ class MatchSoccerController extends Controller
 		return $this->getEm()->getRepository($name);
 	}
 
-	public function listAction(Request $request)
-	{
-		return $this->render(
-			"match.html.twig",
-			[
-    			'matchs' => $this->getEr("AppBundle:MatchSoccer")->findAll()
-			]
-		);
-	}
-
-	protected function processType(Request $request, $data, string $successMessage)
+	protected function processType(Request $request, $data, string $successMessage, string $view)
 	{
 		$form = $this->createForm(MatchSoccerType::class, $data)
 			->handleRequest($request);
@@ -39,7 +29,13 @@ class MatchSoccerController extends Controller
 			$data = $form->getData();
 
 			if ($this->getEr("AppBundle:MatchSoccer")->matchExist($data)) {
-				dump("el partido existe"); die;
+
+				$this->addFlash(
+				"success",
+				"El partido ya existe"
+				);
+
+				return $this->redirect($this->generateUrl("match_create"));
 			}
 
 			$this->getEm()->persist($data);
@@ -47,14 +43,18 @@ class MatchSoccerController extends Controller
 
 			$this->addFlash(
 				"success",
-				sprintf($successMessage, $data->getHome()->getName())
+				sprintf(
+					$successMessage,
+					$data->getHome()->getName(),
+					$data->getVisitor()->getName()
+				)
 			);
 
 			return $this->redirect($this->generateUrl("match_create"));
 		}
 
 		return $this->render(
-			"match.html.twig",
+			$view,
 			[
 				'form'	=> $form->createView()
 			]
@@ -66,7 +66,8 @@ class MatchSoccerController extends Controller
 		return $this->processType(
 			$request,
 			new \AppBundle\Entity\MatchSoccer(),
-			"Se registro el partido %s para el dia :  hs."
+			"Se registro el partido %s vs %d",
+			"match.html.twig"
 		);
 	}
 
@@ -80,7 +81,8 @@ class MatchSoccerController extends Controller
 		return $this->processType(
 			$request,
 			$match,
-			"Se edito el partido %s el 00/00/0000"
+			"Se edito el partido %s vs %d",
+			"edit_match.html.twig"
 		);
 	}
 
@@ -98,8 +100,7 @@ class MatchSoccerController extends Controller
 
 			$this->addFlash(
 				"success",
-				"Se ha eliminado correctamente el partido {$match->getHome()->getName()} VS
-				{$match->getVisitor()->getName()} para el dia: {$match->getDateMatch()->format("Y-m-d H:i:s")}"
+				"Se ha eliminado correctamente el partido"
 			);
 
 		}
@@ -111,17 +112,18 @@ class MatchSoccerController extends Controller
 
 		}
 
-		return $this->redirect($this->generateUrl("match_create"));
+		return $this->redirect($this->generateUrl("match_fixture"));
 	}
 
 	public function fixtureAction(Request $request)
 	{
 		$fixture = $this->getEr("AppBundle:MatchSoccer")->fixture();
-
+		$matchs = $this->getEr("AppBundle:MatchSoccer")->findAll();
 		return $this->render(
 			"fixture.html.twig",
 			[
-				"fixture" => $fixture
+				'fixture' => $fixture,
+				'matchs'  => $matchs
 			]
 		);
 	}

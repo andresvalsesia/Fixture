@@ -72,6 +72,8 @@ doctrine:
 
                 DAY: DoctrineExtensions\Query\Mysql\Day
 
+                DATE: DoctrineExtensions\Query\Mysql\Date
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: '%mailer_transport%'

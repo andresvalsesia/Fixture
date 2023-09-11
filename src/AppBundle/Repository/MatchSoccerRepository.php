@@ -27,21 +27,30 @@ class MatchSoccerRepository extends \Doctrine\ORM\EntityRepository
 	 */
 	public function matchExist(MatchSoccer $match)
 	{
-		//validar que el id que busco cuando edito sea distinto al que entra.
+
 		try {
-			return (bool) $this->createQueryBuilder("m")
+
+			$query = $this->createQueryBuilder("m")
 				->select("COUNT(m.id)")
 				->andWhere("m.home = :home")
 				->andWhere("m.visitor = :visitor")
-				->andWhere("DATE(m.datematch) = :date")
+				->andWhere("DATE(m.datematch) = DATE(:date)")
 				->setParameter("home", $match->getHome() ? (int) $match->getHome()->getId() : 0)
 				->setParameter("visitor", $match->getVisitor() ? (int) $match->getVisitor()->getId() : 0)
-				->setParameter("date", $match->getDateMatch())
-				->getQuery()
-				->getSingleScalarResult();
+				->setParameter("date", $match->getDateMatch());
+
+			if (is_null($match->getId())) {
+				 return (bool) $query->getQuery()
+					->getSingleScalarResult();
+			} else {
+				$query->andWhere("m.id != :id")
+					->setParameter("id", (int) $match->getId())
+					->getQuery()
+					->getSingleScalarResult();
+			}
 		}
 		catch (\Exception $e) {
-			return true;
+			dump($e); die;
 		}
 	}
 
